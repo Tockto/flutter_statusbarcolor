@@ -9,15 +9,45 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.PluginRegistry.Registrar
+import io.flutter.embedding.engine.plugins.FlutterPlugin
+import io.flutter.embedding.engine.plugins.ActivityAware
+import io.flutter.embedding.engine.plugins.ActivityBinding
 
-class FlutterStatusbarcolorPlugin private constructor(private val activity: Activity?) : MethodCallHandler {
-    companion object {
-        @JvmStatic
-        fun registerWith(registrar: Registrar): Unit {
-            val channel = MethodChannel(registrar.messenger(), "plugins.sameer.com/statusbar")
-            channel.setMethodCallHandler(FlutterStatusbarcolorPlugin(registrar.activity()))
-        }
+
+class FlutterStatusbarcolorPlugin private constructor(private val activity: Activity?) : MethodCallHandler, FlutterPlugin, ActivityAware {
+
+    private  MethodChannel channel;
+
+
+    override fun onAttachedToActivity(activityPluginBinding: ActivityPluginBinding?) {
+        channel.setMethodCallHandler(FlutterStatusbarcolorPlugin(activityPluginBinding.getActivity()))
     }
+
+
+    override fun onDetachedFromActivityForConfigChanges(activityPluginBinding: ActivityPluginBinding) {
+        channel.setMethodCallHandler(null)
+    }
+
+
+    override fun onReattachedToActivityForConfigChanges(activityPluginBinding: ActivityPluginBinding?) {
+        channel.setMethodCallHandler(FlutterStatusbarcolorPlugin(activityPluginBinding.getActivity()))
+    }
+
+
+    override fun onDetachedFromActivity() {
+        channel.setMethodCallHandler(null)
+    }
+
+    override fun onAttachToEngine(binding: FlutterPluginBinding): Unit {
+        channel = MethodChannel(binding.getBinaryMessenger(), "plugins.sameer.com/statusbar")
+    }
+
+
+    override fun onDetachedFromEngine(binding: FlutterPluginBinding?) {
+        channel.setMethodCallHandler(null)
+        channel = null
+    }
+
 
     override fun onMethodCall(call: MethodCall, result: Result): Unit {
         if (activity == null) return result.success(null)
