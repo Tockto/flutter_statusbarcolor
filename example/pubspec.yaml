@@ -9,7 +9,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-
   flutter_statusbarcolor_ns:
     path: ../
 
