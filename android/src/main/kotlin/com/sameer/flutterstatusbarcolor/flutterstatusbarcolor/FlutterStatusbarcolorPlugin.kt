@@ -39,14 +39,14 @@ class FlutterStatusbarcolorPlugin : FlutterPlugin, MethodCallHandler, ActivityAw
 
         when (call.method) {
             "getstatusbarcolor" -> {
-                var statusBarColor: Int = 0
+                var statusBarColor: Long = 0L
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     statusBarColor = activity!!.window.statusBarColor
                 }
                 result.success(statusBarColor)
             }
             "setstatusbarcolor" -> {
-                val statusBarColor: Int = call.argument("color")!!
+                val statusBarColor: Long = call.argument("color")!!
                 val animate: Boolean = call.argument("animate")!!
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     if (animate) {
@@ -72,14 +72,14 @@ class FlutterStatusbarcolorPlugin : FlutterPlugin, MethodCallHandler, ActivityAw
                 result.success(null)
             }
             "getnavigationbarcolor" -> {
-                var navigationBarColor: Int = 0
+                var navigationBarColor: Long = 0L
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     navigationBarColor = activity!!.window.navigationBarColor
                 }
                 result.success(navigationBarColor)
             }
             "setnavigationbarcolor" -> {
-                val navigationBarColor: Int = call.argument("color")!!
+                val navigationBarColor: Long = call.argument("color")!!
                 val animate: Boolean = call.argument("animate")!!
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     if (animate) {
